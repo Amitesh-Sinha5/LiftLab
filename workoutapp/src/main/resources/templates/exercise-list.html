@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #bb86fc;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 2px solid #bb86fc;
+            padding-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+            color: #121212;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #a370db;
+            border-color: #a370db;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            color: #e0e0e0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+            border-color: #666;
+            transform: translateY(-2px);
+        }
+        .btn-warning {
+            background-color: #ffb86c;
+            border-color: #ffb86c;
+            color: #121212;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-warning:hover {
+            background-color: #ffa959;
+            border-color: #ffa959;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background-color: #ff5555;
+            border-color: #ff5555;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #f03e3e;
+            border-color: #f03e3e;
+            transform: translateY(-1px);
+        }
+        .btn-tertiary {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+            color: #121212;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-tertiary:hover {
+            background-color: #a370db;
+            border-color: #a370db;
+            transform: translateY(-1px);
+        }
+        .table {
+            color: #e0e0e0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table thead th {
+            background-color: #2d2d2d;
+            color: #bb86fc;
+            border-bottom: 2px solid #444;
+            padding: 12px;
+        }
+        .table tbody td {
+            border-top: 1px solid #444;
+            padding: 12px;
+        }
+        .table tbody tr:hover {
+            background-color: #2d2d2d;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Exercises</h1>
+    <div class="mb-4">
+        <a th:href="@{/exercises/create}" class="btn btn-primary">Create New Exercise</a>
+        <a th:href="@{/}" class="btn btn-secondary ml-2">Home</a>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="exercise : ${exercises}">
+            <td th:text="${exercise.name}"></td>
+            <td th:text="${exercise.description}"></td>
+            <td th:text="${exercise.type}"></td>
+            <td class="action-buttons">
+                <a th:href="@{/exercises/edit/{id}(id=${exercise.id})}" class="btn btn-tertiary">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

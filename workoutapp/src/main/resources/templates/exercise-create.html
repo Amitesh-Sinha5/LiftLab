@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Exercise</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .container {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #bb86fc;
+      margin-bottom: 25px;
+      font-weight: 600;
+      border-bottom: 2px solid #bb86fc;
+      padding-bottom: 10px;
+    }
+    .form-control {
+      background-color: #2d2d2d;
+      border: 1px solid #444;
+      color: #e0e0e0;
+      margin-bottom: 15px;
+    }
+    .form-control:focus {
+      background-color: #333;
+      border-color: #bb86fc;
+      box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25);
+      color: #fff;
+    }
+    label {
+      color: #bb86fc;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .btn-primary {
+      background-color: #bb86fc;
+      border-color: #bb86fc;
+      color: #121212;
+      font-weight: 600;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #a370db;
+      border-color: #a370db;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background-color: #444;
+      border-color: #555;
+      color: #e0e0e0;
+      font-weight: 600;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #555;
+      border-color: #666;
+      transform: translateY(-2px);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h1>Create Exercise</h1>
+  <form th:action="@{/exercises/create}" th:object="${exercise}" method="post">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" th:field="*{description}" class="form-control" rows="4"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="type">Type</label>
+      <input type="text" id="type" th:field="*{type}" class="form-control">
+    </div>
+    <div class="button-group">
+      <a th:href="@{/exercises}" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

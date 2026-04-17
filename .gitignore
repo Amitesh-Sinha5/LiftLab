@@ -1,0 +1,111 @@
+### Build & Compilation ###
+target/
+build/
+/bin/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+buildNumber.properties
+.maven.metadata.xml
+
+### IDE - Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+### IDE - IntelliJ IDEA ###
+.idea/
+.idea_modules/
+*.iws
+*.iml
+*.ipr
+*.iws
+out/
+
+### IDE - VS Code ###
+.vscode/
+.history/
+
+### IDE - NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Logs ###
+*.log
+*.log.*
+logs/
+log.txt
+
+### Database & Local Data ###
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+data/
+database/
+*.sql
+
+### Environment & Configuration ###
+.env
+.env.local
+.env.*.local
+local.properties
+application-local.properties
+application-dev.properties
+
+### OS Specific ###
+.DS_Store
+Thumbs.db
+.Spotlight-V100
+.Trashes
+*.swp
+*~
+.~*
+.#*
+*#
+
+### Temporary Files ###
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+### System & IDE Temporary ###
+.classpath
+.factorypath
+.cache
+.sts4-cache
+.gradle/
+.gradletasknamecache
+
+### Node (if frontend included) ###
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+### Miscellaneous ###
+HELP.md
+*.orig
+!.mvn/wrapper/maven-wrapper.jar
