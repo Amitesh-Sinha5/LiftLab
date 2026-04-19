@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Workout</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+        h1, h3 {
+            color: #bb86fc;
+        }
+        .table {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 8px;
+        }
+        .table th, .table td {
+            border-color: #444;
+        }
+        .badge-success {
+            background-color: #00c853;
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border-color: #6200ea;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: #3700b3;
+            border-color: #3700b3;
+        }
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+            border-color: #666;
+        }
+        .btn-success {
+            background-color: #03dac5;
+            border-color: #03dac5;
+            color: #000;
+        }
+        .btn-success:hover {
+            background-color: #00bfa5;
+            border-color: #00bfa5;
+        }
+        hr {
+            border-color: #444;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Tracking: <span th:text="${workoutLog.workout.name}"></span></h1>
+    <p>Started at: <span th:text="${workoutLog.startTime}"></span></p>
+
+    <div th:each="exercise : ${workoutLog.workout.exercises}">
+        <h3 th:text="${exercise.exercise.name}"></h3>
+        <table class="table mb-4">
+            <tbody>
+            <tr th:each="set : ${workoutLog.completedSets}">
+                <th:block th:if="${set.exercise.id == exercise.exercise.id}">
+                    <td>Set <span th:text="${set.setNumber}"></span></td>
+                    <td>
+                        <span th:if="${set.completed}" class="badge badge-success">Completed</span>
+                        <form th:unless="${set.completed}"
+                              th:action="@{/workouts/complete-set/{logId}/{setId}(logId=${workoutLog.id}, setId=${set.id})}"
+                              method="post"
+                              style="display: inline;">
+                            <button type="submit" class="btn btn-sm btn-primary">Mark Complete</button>
+                        </form>
+                    </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <div th:if="${workoutLog.completedSets.?[!completed].empty}">
+            <a th:href="@{/workouts/complete-workout/{logId}(logId=${workoutLog.id})}"
+               class="btn btn-success mb-3">Complete Workout</a>
+        </div>
+        <a th:href="@{/workouts}" class="btn btn-secondary">Back to Workouts</a>
+    </div>
+</div>
+</body>
+</html>

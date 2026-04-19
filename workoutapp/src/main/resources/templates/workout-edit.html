@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Workout</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 40px;
+      margin-top: 40px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    }
+    h1, h3 {
+      color: #bb86fc;
+    }
+    label, th, td {
+      color: #e0e0e0;
+    }
+    .form-control {
+      background-color: #333;
+      border: 1px solid #555;
+      color: #fff;
+    }
+    .form-control:focus {
+      border-color: #bb86fc;
+      background-color: #444;
+    }
+    .table {
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+      border: 1px solid #444;
+      border-radius: 8px;
+    }
+    .table th {
+      background-color: #333;
+      color: #bb86fc;
+    }
+    .table td {
+      border-color: #444;
+    }
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background-color: #6200ea;
+      border-color: #6200ea;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: #3700b3;
+      border-color: #3700b3;
+    }
+    .btn-secondary {
+      background-color: #444;
+      border-color: #555;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      background-color: #555;
+      border-color: #666;
+    }
+    .btn-success {
+      background-color: #00c853;
+      border-color: #00c853;
+      color: #000;
+    }
+    .btn-success:hover {
+      background-color: #00b34d;
+    }
+    .btn-danger {
+      background-color: #cf6679;
+      border-color: #cf6679;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background-color: #b00020;
+      border-color: #b00020;
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Edit Workout</h1>
+  <form th:action="@{/workouts/edit/{id}(id=${workout.id})}" th:object="${workout}" method="post">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" th:field="*{name}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="btn-row">
+      <a th:href="@{/workouts/start/{id}(id=${workout.id})}" class="btn btn-success">Start This Workout</a>
+      <a th:href="@{/workouts/{id}/add-exercise(id=${workout.id})}" class="btn btn-secondary">Add Exercise</a>
+    </div>
+
+    <h3>Exercises</h3>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Exercise</th>
+        <th>Sets</th>
+        <th>Reps</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="exerciseSet : ${workout.exercises}">
+        <td th:text="${exerciseSet.exercise.name}"></td>
+        <td th:text="${exerciseSet.sets}"></td>
+        <td th:text="${exerciseSet.reps}"></td>
+        <td>
+          <a th:href="@{/workouts/{workoutId}/remove-exercise/{exerciseSetId}(workoutId=${workout.id}, exerciseSetId=${exerciseSet.id})}"
+             class="btn btn-sm btn-danger">Remove</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Save and Cancel -->
+    <div class="btn-row">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a th:href="@{/workouts}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

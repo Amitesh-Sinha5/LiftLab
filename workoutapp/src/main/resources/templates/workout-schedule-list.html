@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Scheduled Workouts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            color: #bb86fc;
+            margin-bottom: 30px;
+        }
+
+        .table {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #444;
+            vertical-align: middle;
+        }
+
+        .table th {
+            background-color: #333;
+            color: #bb86fc;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-secondary {
+            background-color: #3c3c3c;
+            border-color: #3c3c3c;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .btn-start {
+            background-color: #00c853;
+            border-color: #00c853;
+            color: #000000 !important;
+        }
+
+        .btn-start:hover {
+            background-color: #00b34d;
+            color: #000000 !important;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Scheduled Workouts</h1>
+    <a th:href="@{/workouts}" class="btn btn-secondary mb-3">Back to Workouts List</a>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Workout Name</th>
+            <th>Scheduled Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="schedule : ${schedules}">
+            <td th:text="${schedule.workout.name}"></td>
+            <td th:text="${#temporals.format(schedule.scheduledTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <a th:href="@{/workouts/start/{id}(id=${schedule.workout.id})}" class="btn btn-sm btn-start">Start Workout</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

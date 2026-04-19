@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Workout History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #bb86fc;
+            font-weight: 600;
+        }
+        .btn {
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+            border-color: #666;
+            transform: translateY(-2px);
+        }
+        table {
+            color: #e0e0e0;
+        }
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table {
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            color: #e0e0e0;
+        }
+        th {
+            background-color: #333;
+        }
+        tr:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Workout History</h1>
+    <a th:href="@{/progress}" class="btn btn-secondary mb-3">Back</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Workout</th>
+            <th>Duration</th>
+            <th>Completed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="log : ${workoutLogs}">
+            <td th:text="${log.startTime.toLocalDate()}"></td>
+            <td th:text="${log.workout.name}"></td>
+            <td th:text="${log.totalDuration != null ? log.totalDuration.toMinutes() + ' mins' : 'N/A'}"></td>
+            <td th:text="${log.completedSets.?[completed].size() + '/' + log.completedSets.size()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

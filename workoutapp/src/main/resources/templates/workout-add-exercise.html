@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Exercise to Workout</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .container {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 30px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+      color: #bb86fc;
+      font-weight: 600;
+    }
+    .btn {
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background-color: #6200ea;
+      border-color: #6200ea;
+    }
+    .btn-primary:hover {
+      background-color: #3700b3;
+      border-color: #3700b3;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background-color: #444;
+      border-color: #555;
+      color: #e0e0e0;
+    }
+    .btn-secondary:hover {
+      background-color: #555;
+      border-color: #666;
+      transform: translateY(-2px);
+    }
+    .form-group label {
+      color: #e0e0e0;
+    }
+    .form-control {
+      background-color: #333;
+      border: 1px solid #555;
+      color: #ffffff; /* <-- Make input text white */
+    }
+    .form-control option {
+      background-color: #333;
+      color: #ffffff; /* <-- Make dropdown options white */
+    }
+    .form-control:focus {
+      border-color: #bb86fc;
+      background-color: #444;
+      color: #ffffff; /* <-- Make focused input text white */
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h1>Add Exercise to Workout</h1>
+  <form th:action="@{/workouts/{workoutId}/add-exercise(workoutId=${workout.id})}" method="post">
+    <div class="form-group">
+      <label for="exerciseId">Exercise</label>
+      <select class="form-control" id="exerciseId" name="exerciseId" required>
+        <option value="">Select an exercise</option>
+        <option th:each="exercise : ${exercises}"
+                th:value="${exercise.id}"
+                th:text="${exercise.name}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="sets">Sets</label>
+      <input type="number" class="form-control" id="sets" name="sets" min="1" required>
+    </div>
+    <div class="form-group">
+      <label for="reps">Reps</label>
+      <input type="number" class="form-control" id="reps" name="reps" min="1" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a th:href="@{/workouts/edit/{id}(id=${workout.id})}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

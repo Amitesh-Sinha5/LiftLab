@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Goals</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #bb86fc;
+            font-weight: 600;
+        }
+        .progress {
+            height: 20px;
+            margin-bottom: 10px;
+            background-color: #333;
+        }
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+        .completed {
+            background-color: #1e3d2d;
+        }
+        .overdue {
+            background-color: #3d1e1e;
+        }
+        .btn-primary {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+            color: #121212;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #a370db;
+            border-color: #a370db;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            color: #e0e0e0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+            border-color: #666;
+            transform: translateY(-2px);
+            color: #e0e0e0;
+        }
+        .btn-success {
+            background-color: #03dac6;
+            border-color: #03dac6;
+            color: #121212;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #00bfa5;
+            border-color: #00bfa5;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background-color: #ff5555;
+            border-color: #ff5555;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #f03e3e;
+            border-color: #f03e3e;
+            transform: translateY(-1px);
+        }
+        .table {
+            color: #e0e0e0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table thead th {
+            background-color: #2d2d2d;
+            color: #bb86fc;
+            border-bottom: 2px solid #444;
+            border-top: none;
+            padding: 12px;
+        }
+        .table tbody td {
+            border-top: 1px solid #444;
+            padding: 12px;
+        }
+        .table tbody tr:hover {
+            background-color: #2d2d2d;
+            color: #eeeeee
+        }
+        .badge-success {
+            background-color: #03dac6;
+            color: #121212;
+        }
+        .badge-warning {
+            background-color: #ffb86c;
+            color: #121212;
+        }
+        .badge-danger {
+            background-color: #ff5555;
+        }
+        .table-bordered {
+            border: 1px solid #444;
+        }
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #444;
+        }
+        .btn-group {
+            display: flex;
+            gap: 5px;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Manage Goals</h1>
+        <div class="header-buttons">
+            <a th:href="@{/}" class="btn btn-secondary">Back</a>
+            <a th:href="@{/goals/create}" class="btn btn-primary">Create New Goal</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Progress</th>
+                <th>Target Date</th>
+                <th>Reminder Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="goal : ${goals}">
+                <td th:text="${goal.goalType}"></td>
+                <td th:text="${goal.description}"></td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar"
+                             th:classappend="${goal.progress >= 100} ? 'bg-success' : 'bg-primary'"
+                             th:style="'width:' + ${goal.progress} + '%'"
+                             th:text="${goal.progress} + '%'">
+                        </div>
+                    </div>
+                </td>
+                <td th:text="${goal.targetDate != null} ? ${#temporals.format(goal.targetDate, 'yyyy-MM-dd')} : 'N/A'"></td>
+                <td th:text="${goal.reminderDate != null} ? ${#temporals.format(goal.reminderDate, 'yyyy-MM-dd')} : 'N/A'"></td>
+                <td>
+                    <span th:if="${goal.completed}" class="badge badge-success">Completed</span>
+                    <span th:unless="${goal.completed}"
+                          th:class="${goal.targetDate != null and goal.targetDate.isBefore(T(java.time.LocalDate).now())} ? 'badge badge-danger' : 'badge badge-warning'"
+                          th:text="${goal.targetDate != null and goal.targetDate.isBefore(T(java.time.LocalDate).now())} ? 'Overdue' : 'In Progress'">
+                        </span>
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a th:href="@{/goals/edit/{id}(id=${goal.id})}" class="btn btn-sm btn-secondary">Edit</a>
+                        <a th:href="@{/goals/complete/{id}(id=${goal.id})}"
+                           th:if="${!goal.completed}"
+                           class="btn btn-sm btn-success">Complete</a>
+                        <a th:href="@{/goals/delete/{id}(id=${goal.id})}" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

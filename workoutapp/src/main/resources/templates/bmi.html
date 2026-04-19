@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BMI Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin: 40px auto;
+            max-width: 700px;
+        }
+        h1 {
+            color: #bb86fc;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        label {
+            font-weight: 500;
+        }
+        .form-control {
+            background-color: #2d2d2d;
+            border: 1px solid #444;
+            color: #fff;
+        }
+        .btn-calculate {
+            background-color: #03dac5;
+            border: none;
+            color: #000;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+        .btn-calculate:hover {
+            background-color: #00bfa5;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        .bmi-range {
+            margin-top: 30px;
+        }
+        .bmi-bar {
+            height: 25px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        /* Gradient bars with yellow (left), green (middle), and red (right) */
+        .male-bar {
+            background: linear-gradient(90deg, #ffeb3b 0%, #4caf50 50%, #f44336 100%);
+        }
+
+        .female-bar {
+            background: linear-gradient(90deg, #ffeb3b 0%, #4caf50 50%, #f06292 100%);
+        }
+
+        .bmi-ranges {
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            color: #bb86fc;
+            margin-top: 10px;
+        }
+        .bmi-range-numbers {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-back {
+            background-color: #444;
+            border-color: #555;
+            color: #fff;
+        }
+        .btn-back:hover {
+            background-color: #555;
+            border-color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>BMI Calculator</h1>
+    <form th:action="@{/bmi}" method="post" th:object="${bmiForm}">
+        <div class="form-group">
+            <label for="height">Height (in meters):</label>
+            <input type="number" step="0.01" th:field="*{height}" class="form-control" id="height" required>
+        </div>
+        <div class="form-group">
+            <label for="weight">Weight (in kilograms):</label>
+            <input type="number" step="0.1" th:field="*{weight}" class="form-control" id="weight" required>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select th:field="*{gender}" class="form-control" id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" th:field="*{age}" class="form-control" id="age" required>
+        </div>
+        <button type="submit" class="btn btn-calculate btn-block">Calculate</button>
+    </form>
+
+    <div th:if="${bmi != null}" class="result">
+        <p class="mb-1">Your BMI: <strong th:text="${bmi}"></strong></p>
+        <p class="mb-1">
+            <strong
+                th:text="${bmiCategory}"
+                th:style="${bmiCategory == 'Healthy'} ? 'color:#03dac5'
+                         : (${bmiCategory == 'Underweight'} ? 'color:#ffeb3b'
+                         : (${bmiCategory == 'Obese'} ? 'color:#ff5555'
+                         : 'color:#cf6679'))">
+            </strong>
+        </p>
+        <!-- Age-specific advisory notes -->
+        <p th:if="${bmiForm.age < 18}" class="small mt-2" style="color:#ffb86c;">
+            Standard adult thresholds do not apply for users under 18.
+            Please consult a healthcare professional for growth-chart percentiles.
+        </p>
+        <p th:if="${bmiForm.age >= 65}" class="small mt-2" style="color:#bb86fc;">
+            For adults 65 and over, WHO guidance raises the healthy upper limit to 27.0.
+        </p>
+    </div>
+
+    <div class="bmi-range">
+        <h5 class="text-center text-light">BMI Range
+            <small th:if="${bmiForm != null}" class="text-muted"
+                   th:text="'(' + ${bmiForm.gender} + ', age ' + ${bmiForm.age} + ')'"></small>
+        </h5>
+        <!-- Switch colour bar based on submitted gender -->
+        <div class="bmi-bar"
+             th:classappend="${bmiForm != null and bmiForm.gender == 'female'} ? 'female-bar' : 'male-bar'"
+             style="width: 100%;"></div>
+        <div class="bmi-ranges">
+            <span>Underweight</span>
+            <span>Normal</span>
+            <span>Overweight</span>
+            <span>Obese</span>
+        </div>
+        <div class="bmi-range-numbers">
+            <span>18.5</span>
+            <span th:text="${bmiForm != null and bmiForm.age >= 65} ? '27.0' : '24.9'">24.9</span>
+            <span>29.9</span>
+            <span>30+</span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="btn btn-back mt-3">Back</a>
+</div>
+</body>
+</html>

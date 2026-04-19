@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Workout</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #bb86fc;
+        }
+        .form-group label {
+            color: #e0e0e0;
+        }
+        .form-control {
+            background-color: #333;
+            border: 1px solid #555;
+            color: #fff;
+        }
+        .form-control:focus {
+            border-color: #bb86fc;
+            background-color: #444;
+            color: #fff;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border-color: #6200ea;
+        }
+        .btn-primary:hover {
+            background-color: #3700b3;
+            border-color: #3700b3;
+        }
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+            border-color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Create Workout</h1>
+    <form th:action="@{/workouts/create}" th:object="${workout}" method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/workouts}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+    <!-- Only show Add Exercise button if workout is already created -->
+    <div class="mt-3" th:if="${workout.id != null}">
+        <a th:href="@{/workouts/{id}/add-exercise(id=${workout.id})}" class="btn btn-success">Add Exercises</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Workout List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            color: #bb86fc;
+            margin-bottom: 30px;
+        }
+
+        .form-control, .form-control-sm {
+            background-color: #2b2b2b;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 8px;
+        }
+
+        .form-control:focus, .form-control-sm:focus {
+            border-color: #bb86fc;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .table {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #444;
+            vertical-align: middle;
+        }
+
+        .table th {
+            background-color: #333;
+            color: #bb86fc;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #6200ea;
+            border-color: #6200ea;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #3700b3;
+        }
+
+        .btn-info {
+            background-color: #03dac5;
+            border-color: #03dac5;
+            color: #000;
+        }
+
+        .btn-info:hover {
+            background-color: #00bfa5;
+            color: #000;
+        }
+
+        .btn-secondary {
+            background-color: #3c3c3c;
+            border-color: #3c3c3c;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .btn-edit {
+            background-color: #7c4dff;
+            border-color: #7c4dff;
+            color: #ffffff !important;
+        }
+
+        .btn-edit:hover {
+            background-color: #651fff;
+            color: #ffffff !important;
+        }
+
+        .btn-start {
+            background-color: #00c853;
+            border-color: #00c853;
+            color: #000000 !important;
+        }
+
+        .btn-start:hover {
+            background-color: #00b34d;
+            color: #000000 !important;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+        }
+
+        .top-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-inline .form-control {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Workouts</h1>
+
+    <div class="top-btns">
+        <a th:href="@{/workouts/create}" class="btn btn-primary">Create New Workout</a>
+        <a th:href="@{/workouts/scheduled}" class="btn btn-info">View Scheduled Workouts</a>
+        <a th:href="@{/}" class="btn btn-secondary">Home</a>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Exercises</th>
+            <th>Next Schedule</th>
+            <th>Schedule</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="workout : ${workouts}">
+            <td th:text="${workout.name}"></td>
+            <td th:text="${workout.description}"></td>
+            <td th:text="${workout.exercises.size()}"></td>
+
+            <td>
+        <span th:text="${nextSchedules[workout.id] != null ?
+                        #temporals.format(nextSchedules[workout.id], 'yyyy-MM-dd HH:mm') :
+                        'Not Scheduled'}">
+        </span>
+            </td>
+
+            <td>
+                <form th:action="@{'/workouts/' + ${workout.id} + '/schedule'}" method="post" class="form-inline">
+                    <input type="datetime-local" name="scheduledTime" class="form-control form-control-sm mr-2" required />
+                    <button type="submit" class="btn btn-sm btn-info">Set</button>
+                </form>
+            </td>
+
+            <td>
+                <a th:href="@{/workouts/edit/{id}(id=${workout.id})}" class="btn btn-sm btn-edit mb-1">Edit</a>
+                <a th:href="@{/workouts/start/{id}(id=${workout.id})}" class="btn btn-sm btn-start mb-1">Start</a>
+                <form th:action="@{/workouts/delete/{id}(id=${workout.id})}" method="post" style="display:inline;"
+                      onsubmit="return confirm('Delete this workout?');">
+                    <button type="submit" class="btn btn-sm btn-danger mb-1">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

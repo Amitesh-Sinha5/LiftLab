@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${measurement.id != null} ? 'Edit Measurement' : 'New Measurement'">Body Measurement</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #bb86fc;
+            font-weight: 600;
+        }
+        label {
+            font-weight: 500;
+        }
+        .form-control {
+            background-color: #2d2d2d;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+        .form-control:focus {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-color: #bb86fc;
+            box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25);
+        }
+        .form-text {
+            color: #aaa;
+        }
+        .btn-primary {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+            color: #121212;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #a370db;
+            border-color: #a370db;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+            color: #e0e0e0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+            border-color: #666;
+            transform: translateY(-2px);
+        }
+        .alert-danger {
+            background-color: #3d1e1e;
+            border-color: #ff5555;
+            color: #ffbbbb;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${measurement.id != null} ? 'Edit Body Measurement' : 'New Body Measurement'">Body Measurement</h1>
+    <form th:action="@{/progress/body/save}" th:object="${measurement}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" class="form-control" id="date" th:field="*{date}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" step="0.1" class="form-control" id="weight" th:field="*{weight}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="height">Height (m)</label>
+            <input type="number" step="0.01" class="form-control" id="height" th:field="*{height}" required>
+            <small class="form-text text-muted">Enter height in meters (e.g., 1.75)</small>
+        </div>
+
+        <div class="form-group">
+            <label for="bmi">BMI</label>
+            <input type="number" step="0.1" class="form-control" id="bmi" th:field="*{bmi}" placeholder="Enter BMI" required>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="chest">Chest (cm)</label>
+                    <input type="number" step="0.1" class="form-control" id="chest" th:field="*{chest}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="waist">Waist (cm)</label>
+                    <input type="number" step="0.1" class="form-control" id="waist" th:field="*{waist}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="biceps">Biceps (cm)</label>
+                    <input type="number" step="0.1" class="form-control" id="biceps" th:field="*{biceps}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea class="form-control" id="notes" rows="3" th:field="*{notes}"></textarea>
+        </div>
+
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/progress}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

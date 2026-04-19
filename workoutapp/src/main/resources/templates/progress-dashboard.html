@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Progress Dashboard</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .container {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 30px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    h1, h2 {
+      color: #bb86fc;
+      font-weight: 600;
+    }
+    .btn {
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background-color: #bb86fc;
+      border-color: #bb86fc;
+      color: #121212;
+    }
+    .btn-primary:hover {
+      background-color: #a370db;
+      border-color: #a370db;
+      transform: translateY(-2px);
+    }
+    .btn-success {
+      background-color: #4caf50;
+      border-color: #4caf50;
+    }
+    .btn-success:hover {
+      background-color: #45a049;
+      border-color: #45a049;
+    }
+    .btn-secondary {
+      background-color: #444;
+      border-color: #555;
+      color: #e0e0e0;
+    }
+    .btn-secondary:hover {
+      background-color: #555;
+      border-color: #666;
+      transform: translateY(-2px);
+    }
+    table {
+      color: #e0e0e0;
+    }
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .table {
+      background-color: #2d2d2d;
+      border-radius: 8px;
+      color: #e0e0e0;
+    }
+    th {
+      background-color: #333;
+    }
+    tr:hover {
+      background-color: #444;
+    }
+    .alert-danger {
+      background-color: #3d1e1e;
+      border-color: #ff5555;
+      color: #ffbbbb;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h1>Progress Dashboard</h1>
+
+  <div class="row">
+    <!-- Body Measurements Section -->
+    <div class="col-md-6">
+      <h2>Body Measurements</h2>
+      <div class="mb-3">
+        <a th:href="@{/progress/body/new}" class="btn btn-primary">Add New Measurement</a>
+        <a th:href="@{/progress/export}" class="btn btn-primary">Export Progress Report</a>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Weight</th>
+          <th>BMI</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="measurement : ${bodyMeasurements}">
+          <td th:text="${measurement.date}"></td>
+          <td th:text="${measurement.weight} + ' kg'"></td>
+          <td th:text="${measurement.bmi != null ? T(java.lang.String).format('%.1f', measurement.bmi) : 'N/A'}"></td>
+          <td>
+            <a th:href="@{/progress/body/edit/{id}(id=${measurement.id})}" class="btn btn-sm btn-primary">Edit</a>
+            <a th:href="@{/progress/body/delete/{id}(id=${measurement.id})}" class="btn btn-sm btn-danger">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Recent Workouts Section -->
+    <div class="col-md-6">
+      <h2>Recent Workouts</h2>
+      <a th:href="@{/progress/workouts}" class="btn btn-secondary mb-3">View All</a>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Workout</th>
+          <th>Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="log : ${workoutHistory.size() > 3 ? workoutHistory.subList(0, 3) : workoutHistory}">
+          <td th:text="${log.startTime.toLocalDate()}"></td>
+          <td th:text="${log.workout.name}"></td>
+          <td th:text="${log.totalDuration != null ? log.totalDuration.toMinutes() + ' mins' : 'N/A'}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Back to Home Button -->
+  <a th:href="@{/}" class="btn btn-secondary mt-3">Back to Home</a>
+</div>
+</body>
+</html>
